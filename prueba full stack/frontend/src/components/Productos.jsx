@@ -1,53 +1,50 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate, Link, NavLink } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Layout } from './Layout';
-import { useUser } from '../context/UserContext';
 import { Loading } from './Loading';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import Pagination from 'rc-pagination';
+import { useUser } from '../context/UserContext';
+import { data } from 'autoprefixer';
 
 
 export const Productos = () => {
-  const { user } = useUser();
   //verificar por que user primero carga vacio luego carga con el usuario lo cual hace que no se autentique correctamente
+  const { user } = useUser();
   const usuario = JSON.parse(localStorage.getItem("usuario"))
-  //console.log(usuario);
+  const options = { headers: { authorization: "Bearer " + user.token } }
   const [productList, setProductList] = useState([]);
-  const options = { headers: { authorization: "Bearer " + usuario.token } }
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState("");
+  const [disableBoton, setDisableBoton] = useState(false)
 
-  //console.log(options);
+
   const listarProductos = useCallback(async (pageCurrent) => {
     try {
-      console.log(pageCurrent);
       setLoading(true);
       const { data } = await axios.get(`producto/listarproducto/?page=${pageCurrent}`, options);
       setLoading(false);
-      //console.log(data.productos.page);
       if (data.productos.docs.length > 0) {
         setProductList(data.productos.docs);
         setPage(data.productos.page);
         setTotalPage(data.productos.totalPages)
-        //setHasProduct(false);
-        //console.log(productList )
-
       } else {
         setLoading(false);
+        setDisableBoton(true)
         setProductList([]);
-        //cambiar a true cuando meta productos
-        // setHasProduct(true);
       }
     } catch (error) {
+      setLoading(false)
       if (!error.response.data.ok) {
+        data.response.data.ok === false &&  (setDisableBoton(false))
         return Swal.fire({
           icon: 'error',
           title: error.response.data.message,
           showConfirmButton: false,
-          timer: 1500,
+          timer: 2500,
         });
       }
       console.log('error en  listarProductos', error.message);
@@ -64,13 +61,11 @@ export const Productos = () => {
   }
 
   const actualizarProducto = (id) => {
-    console.log(id);
     navigate("/accionproducto/" + id);
   }
 
   const borrarProducto = async (id) => {
     try {
-      console.log(id);
       Swal.fire({
         title: 'estas seguro?',
         text: "esta operacion no se puede revertir",
@@ -93,7 +88,12 @@ export const Productos = () => {
       })
     } catch (error) {
       if (!error.response.data.ok) {
-        return alert(error.response.data.message)
+        return Swal.fire({
+          icon: 'error',
+          title: error.response.data.message,
+          showConfirmButton: false,
+          timer: 1500,
+        });
       }
       console.log("error en borrar producto", error.message)
     }
@@ -106,13 +106,14 @@ export const Productos = () => {
         <div>
           {/* empieza tabla */}
           <h4 className='fw-bold'>Productos registrados</h4>
+          <>
+         {(usuario.roles[0].name === "admin"|| usuario.roles[0].name === "bodega" || usuario.roles[0].name === "vendedor") ?
           <div className="container-fluid">
-           
-            <Link className='btn bg-primary text-white' to="/accionproducto/ ">nuevo producto</Link>{" "}
-            <table className="table mt-5 table-secondary table-hover align-middle table-hover">
-              <thead>
+           <Link className={`btn bg-primary text-white `} to="/accionproducto/ ">nuevo producto</Link>
+            <table className="table mt-5 table-secondary table-hover align-middle table-hover table-striped shadow-lg rounded">
+              <thead >
                 <tr>
-                  <th>#</th>
+                  <th scope="col">#</th>
                   <th >Imagen</th>
                   <th>Nombre</th>
                   <th>Descripcion</th>
@@ -157,8 +158,10 @@ export const Productos = () => {
                 onChange={onchangePage}
               />
             </div>
-
+          </div>:<div> 
+            <h2>usted no tiene acceso a este modulo</h2>
           </div>
+}</>
         </div>
       }
 

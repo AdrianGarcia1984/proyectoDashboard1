@@ -14,12 +14,12 @@ export const Login = () => {
     const login = (e) => {
         e.preventDefault();
         const user = { email, password };
-        //console.log(user);
         loginUser(user, navigate);
     }
 
     return (<>
         {loading ? <Loading /> :
+        <div id='content'>       
                            <section className="container m-5 mb-5 mx-auto col-4-md-5 d-flex bg-gray">
                            <div className="card mx-auto card-login">
                                <div className="card-body">
@@ -51,6 +51,7 @@ export const Login = () => {
                                </div>
                            </div>
                        </section>
+                       </div>
         }
     </>
     );

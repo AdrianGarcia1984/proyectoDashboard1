@@ -21,7 +21,6 @@ export const Registrar = () => {
     const { loading, registerUser } = useUser();
 
     //funcion register
-
     const register = (e) => {
         e.preventDefault();
         const ok = true
@@ -41,8 +40,6 @@ export const Registrar = () => {
                 setUserData({ ...userData, img: "", preview: "" })
             } else {
                 setUserData({ ...userData, img: imagen, preview: URL.createObjectURL(imagen) })
-                // setImage(imagen);
-                // setPreview(URL.createObjectURL(imagen));
             }
         }
     }
@@ -51,6 +48,7 @@ export const Registrar = () => {
 
         <>
             {loading ? <Loading /> :
+            <div id='content'>
 
                 <section className="container mt-5 mb-5 mx-auto col-4-md-5 d-flex">
                     <div className="card mx-auto card-login">
@@ -105,6 +103,7 @@ export const Registrar = () => {
                         </div>
                     </div>
                 </section>
+                </div>
             }</>
     )
 }

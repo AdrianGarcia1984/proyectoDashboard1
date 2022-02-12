@@ -22,7 +22,7 @@ const usuarioSchema = new Schema({
     },
     contacto: {
         type: Number,
-        // required: true
+       
     },
     img: String,
     nameImg: String,

@@ -12,11 +12,12 @@ usuarioCtrl.listarUsuario = async (req, res) => {
     try {
         const usuarios = await usuarioModel.find({}, { password: 0 }).populate("roles");
         //si necesito enviar para consulta el rolmodel utilizo lo que esta comentado
-        //const rolModel = await roleModel.find()       
+        const rolModel = await roleModel.find() 
+   
         res.json({
             ok: true,
             usuarios,
-           // rolModel
+            rolModel
         })
 
     } catch (error) {
@@ -26,6 +27,30 @@ usuarioCtrl.listarUsuario = async (req, res) => {
         })
     }
 }
+
+//Listar usuario id
+usuarioCtrl.listarUsuarioId = async (req, res) => {
+    try {
+         const { id } = req.params;
+         const usuario = await usuarioModel.findById({ _id: id }, { password: 0 }).populate("roles");
+        
+         if (!usuario) {
+             return res.status(404).json({
+                 ok: false,
+                 message: 'el usuario no existe',
+             })
+         }
+         res.json({
+             ok: true,
+             usuario
+         })
+     } catch (error) {
+         res.status(500).json({
+             ok: false,
+             message: error.message
+         })
+     }
+ }
 
 //creando un usuario
 
@@ -138,11 +163,12 @@ usuarioCtrl.login = async (req, res) => {
 usuarioCtrl.borrarUsuario = async (req, res) => {
     {
         try {
-            //capturando los datos del frontend
+            //capturando los datos del frontend            
             const { id } = req.params;
             //verificando si existe el usuario
             const usuario = await usuarioModel.findById({ _id: id });
-            if (!user) {
+           
+            if (!usuario) {
                 return res.status(404).json({
                     ok: false,
                     message: 'el usuario no existente',
@@ -177,7 +203,7 @@ usuarioCtrl.actualizar=async (req,res)=>{
         const  {id } = req.params
         //console.log(id);
         const usuario = await usuarioModel.findById({ _id: id });
-        console.log(usuario);
+  
         if (!usuario) {
             return res.status(404).json({
                 ok: false,

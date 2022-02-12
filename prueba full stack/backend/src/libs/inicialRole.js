@@ -16,8 +16,6 @@ createRole.create = async (req, res) => {
             new role({ name: 'THumano' }).save(),
         ])
         return values
-
-
     } catch (error) {
         res.status(500).json({
             ok: false,

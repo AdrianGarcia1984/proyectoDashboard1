@@ -62,10 +62,7 @@ productoCtrl.listarProductoId = async (req, res) => {
 productoCtrl.crearProducto = async (req, res) => {
     try {
         const { nombre, descripcion, usuario, precio, stock } = req.body;
-        console.log(req.body);
-        //console.log(usuario);
         const userFind= await usuarioModel.findOne({_id:usuario})
-        console.log(userFind);
         const newProduct = new productoModel({
             nombre,
             descripcion,
@@ -124,7 +121,7 @@ productoCtrl.borrarProducto = async (req, res) => {
 productoCtrl.actualizarProducto = async (req, res) => {
     try {
         const { id } = req.params;
-        console.log(req.body)
+        //console.log(req.body)
         const productos = await productoModel.findById({ _id: id });
        //console.log(id)
         //console.log(productos)
@@ -132,15 +129,14 @@ productoCtrl.actualizarProducto = async (req, res) => {
             return res.json({ ok: false, message: "producto no encontrado" })
         }
         if (req.file) {
-            console.log(productos.nameImg);
+           
             if (productos.nameImg) {
                 deleteImg(productos.nameImg);
             }
             const { filename } = req.file;
             productos.setimgUrl(filename);
             await productos.save();
-        }
-        
+        }        
         const nombre = req.body.nombre || productos.nombre
         const descripcion = req.body.descripcion || productos.descripcion
         const precio = req.body.precio || productos.precio

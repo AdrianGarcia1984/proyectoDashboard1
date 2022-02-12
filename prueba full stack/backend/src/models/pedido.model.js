@@ -4,15 +4,10 @@ var moment = require('moment-timezone');
 //console.log(now)
 
 const pedidoSchema=new Schema({
-    producto:{
+    producto:[{
         type: Schema.Types.ObjectId,
         ref:"Producto",
-    },
-    total:{
-        type:Number,
-        required:true,
-        trim:true
-    },
+    }],
     factura:{
         type:String,
         //required:true,
@@ -30,13 +25,18 @@ const pedidoSchema=new Schema({
         type: Schema.Types.ObjectId,
         ref:"Cliente",
     },
+    total:{
+        type:Number,
+        required:true,
+        trim:true
+    },
     cantidad:Number,
-    valor:Number,
+    //precio:Number,
     estado:{
         type:String,
         enum:[
             'cancelado',
-            'comfirmado',
+            'confirmado',
             'pendiente'
         ]      
     }

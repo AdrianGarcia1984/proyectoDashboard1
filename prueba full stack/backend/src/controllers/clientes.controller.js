@@ -27,8 +27,8 @@ clienteCtrl.registrar = async (req, res) => {
         const { nombre, apellido, empresa, contacto, correo, } = req.body;
         //console.log(correo);
         const cliente = await clienteModel.find({correo});
-        console.log(cliente);
-        console.log(cliente.length);
+        //console.log(cliente);
+        //console.log(cliente.length);
         if (cliente.length!==0) {
             return res.status(404).json({
                 ok: false,
@@ -70,6 +70,7 @@ clienteCtrl.listarPorId = async (req, res) => {
         const {id} = req.params;
         //console.log(id);
         const cliente = await clienteModel.findById({_id:id});
+        //console.log(cliente);
         if (!cliente){
             return res.status(404).json({
                 ok: false,
@@ -92,6 +93,7 @@ clienteCtrl.actualizar = async (req,res)=>{
     try {
             const {id} = req.params
             const cliente = clienteModel.findById({_id:id});
+            //console.log(cliente);
             if (!cliente){
                 return res.status(404).json({
                     ok: false,
@@ -129,19 +131,20 @@ clienteCtrl.actualizar = async (req,res)=>{
 
 clienteCtrl.borrar = async (req,res)=>{
     try {
-        const {id} = req.params
-            const cliente = clienteModel.findById({_id:id});
-        if (!cliente) {
+        const {id} = req.params;
+        //console.log(id);
+        const cliente = await clienteModel.findById({_id:id});
+        //console.log(cliente);
+        if (!cliente){
             return res.status(404).json({
                 ok: false,
-                message: 'el cliente no existente',
+                message: 'el cliente no existe en la base de datos',
             })
         }
-        await cliente.findByIdAndDelete({_id:id});
+        await clienteModel.findByIdAndDelete({_id:id});
         res.json({
             ok: true,
-            message: "cliente eliminado",          
-            
+            message: "cliente eliminado correctamente",            
         })  
 
     } catch (error) {

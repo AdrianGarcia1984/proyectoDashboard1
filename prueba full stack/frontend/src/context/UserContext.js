@@ -11,7 +11,7 @@ export const UserProvider = (props) => {
     //inicializar estados
     const [user, setUser] = useState(initialState);
     const [loading, setLoading] = useState(false);
-   
+       
     //loginUser para iniciar sesion
     //(user para capturar datos de usuario, history para mover lo del usuario)
 
@@ -33,19 +33,17 @@ export const UserProvider = (props) => {
                     img:data.img,
                     nameImg:data.nameImg,
                     preview:data.preview
-
                 }
-               // console.log(data);
                 localStorage.setItem('usuario', JSON.stringify(userLogin));
                 setUser(userLogin);
+
                 Swal.fire({
                     icon: 'success',
                     title: data.message,
                     showConfirmButton: false,
                     timer: 1500,
                 });
-                //navigate para mover al usuario por las rutas  
-                //console.log(userLogin.roles[0].name);              
+                //navigate para mover al usuario por las rutas                
                 (userLogin.roles[0].name==='admin') && navigate('/productos');
                 (userLogin.roles[0].name==='vendedor') && navigate('/clientes');
                 (userLogin.roles[0].name==='bodega') && navigate('/productos');
@@ -53,7 +51,6 @@ export const UserProvider = (props) => {
             }
         } catch (error) {
             setLoading(false);
-            console.log(error)
             if (!error.response.data.ok) {
                 return Swal.fire({
                     icon: 'error',
@@ -70,7 +67,6 @@ export const UserProvider = (props) => {
      //si se cierra el navegador para que se vuelva a autologuear usando useEfect
      useEffect(() => {
         const initial = JSON.parse(localStorage.getItem("usuario"))
-        //console.log(initial);
         initial ? initial.login && setUser(initial) : setUser(initialState);
     }, []);
 
@@ -82,7 +78,6 @@ export const UserProvider = (props) => {
             setLoading(true);
             const { data } = await axios.post('usuario/registrar', user);
             setLoading(false);
-            console.log(data);
             //lo comentado es cuando tengamos la pagina de registro y crear usuario
            // if (ok){
                 if (data.ok) {
@@ -97,7 +92,6 @@ export const UserProvider = (props) => {
                         token: data.token,
                         
                     }
-                    //console.log(userLogin)
                     localStorage.setItem('usuario', JSON.stringify(userLogin));
                     setUser(userLogin);
                     Swal.fire({
@@ -149,6 +143,7 @@ export const UserProvider = (props) => {
         registerUser,
         exit,
         loading,
+       
     };
 
     return <UserContext.Provider value={value} {...props} />;

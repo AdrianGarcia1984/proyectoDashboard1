@@ -14,10 +14,11 @@ const upload=require('../midlewares/imgUpload');
 // route.post('/login',usuarioCtrl.login);
  
 //con jwt y rol check
+route.post('/login',usuarioCtrl.login);
 route.get('/',verifyToken.verify, verifyToken.grupoUsuarios,usuarioCtrl.listarUsuario);
 route.delete('/borrar/:id',verifyToken.verify, verifyToken.grupoUsuarios,usuarioCtrl.borrarUsuario);
 route.put('/actualizar/:id',verifyToken.verify, verifyToken.grupoUsuarios,upload.single('img'), usuarioCtrl.actualizar);
 route.post('/registrar',upload.single('img'),usuarioCtrl.registrarUsuario);
-route.post('/login',usuarioCtrl.login);
+route.get('/listar/:id',verifyToken.verify, verifyToken.grupoUsuarios,usuarioCtrl.listarUsuarioId)
 
 module.exports=route;

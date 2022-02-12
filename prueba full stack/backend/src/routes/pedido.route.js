@@ -12,11 +12,11 @@ const route=Router();
 // route.get('/vendedor',pedidoCtrl.mejoresVendedores);
 // route.get('/cliente',pedidoCtrl.mejoresClientes);
 // route.delete('/eliminar/:id',pedidoCtrl.eliminar);
-
+//route.post('/crear',pedidoCtrl.crearPedido);
 //con jwt y rol check
 
 route.get('/',verifyToken.verify,verifyToken.grupoPedidos,pedidoCtrl.listarPedidos);
-route.post('/crear',verifyToken.grupoPedidos,pedidoCtrl.crearPedido);
+route.post('/crear',verifyToken.verify,verifyToken.grupoPedidos,pedidoCtrl.crearPedido);
 route.put('/editar/:id',verifyToken.verify,verifyToken.grupoPedidos,pedidoCtrl.editar);
 route.get('/pedido/:id',verifyToken.verify,verifyToken.grupoPedidos,pedidoCtrl.listarPedidoId);
 route.get('/vendedor',verifyToken.verify,verifyToken.grupoPedidos,pedidoCtrl.mejoresVendedores);

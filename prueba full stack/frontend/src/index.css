@@ -6,7 +6,7 @@
   --grey: #efefef;
   --blue:#2b4acb;
   --gray:#8c8c8c;
-  --gray-3:#f0f0f0;
+  --gray-3:#bfbfbf;
 }
 
 body {
@@ -52,11 +52,11 @@ a:hover {
 }
 
 #sidebar-container .menu {
-  width: 18rem;
+  width: 13rem;
 }
 
 #content {
-  overflow-y: auto;
+  overflow-y: auto;  
   height: 100vh;
   padding-bottom: 5rem;
 }
@@ -74,7 +74,7 @@ a:hover {
 }
 
 
-@media (max-width: 768px) {
+@media (max-width: 500px) {
   #sidebar-container {
     display: none;
   }

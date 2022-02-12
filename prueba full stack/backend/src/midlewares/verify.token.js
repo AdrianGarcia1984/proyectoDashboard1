@@ -36,6 +36,7 @@ verifyToken.verify =  (req, res, next) => {
             })
         }
         req.userid = payload._id;
+      
         next();
 
     });
@@ -88,7 +89,7 @@ verifyToken.grupoProductos=async (req,res,next)=>{
        //console.log(req.userid)
        //console.log(usuario.roles)
        const roles= await roleModel.find({_id: {$in: usuario.roles}}) 
-        if  (roles[0].name === "bodega" || roles[0].name === "admin"){            
+        if  (roles[0].name === "bodega" || roles[0].name === "admin"||roles[0].name === "vendedor"){            
             next()
             return
         }     
@@ -107,6 +108,7 @@ verifyToken.grupoProductos=async (req,res,next)=>{
  verifyToken.grupoPedidos=async (req,res,next)=>{
     try {
        const usuario= await usuarioModel.findById (req.userid);
+       //console.log(req.userid);
        const roles= await roleModel.find({_id: {$in: usuario.roles}})      
         if  (roles[0].name === "vendedor"||roles[0].name ==="admin"){            
             next()
@@ -119,7 +121,7 @@ verifyToken.grupoProductos=async (req,res,next)=>{
     } catch (error) {
         res.status(500).json({
             ok: false,
-            message: error.message
+            message: (error.message,'error desde grupo pedidos')
         })
     }
  }
